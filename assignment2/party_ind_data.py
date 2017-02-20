@@ -1,3 +1,8 @@
+
+# coding: utf-8
+
+# In[ ]:
+
 #!/usr/bin/env python
 import openpyxl as pxl
 import scipy.io as scio
@@ -16,8 +21,8 @@ party_ind = {}
 
 # In[ ]:
 
-for party in sheet.iter_rows():
-    for info in party:
+for row in sheet.iter_rows():
+    for info in row:
         if info.row > 2 and info.row < 468:
             if info.column == 'A':
                 abbr = info.internal_value
@@ -29,7 +34,13 @@ for party in sheet.iter_rows():
                 votes = info.internal_value
             elif info.column == 'G':
                 votesPer = info.internal_value
-    party_ind[abbr]= [name,seatsWon,votes,votesPer]
+    if info.row > 2 and info.row < 468:
+        party_ind[abbr]= [name,seatsWon,votes,votesPer]
+
+
+# In[ ]:
+
+party_ind['NOTA'] = ['None of the Above', 0, 6000197, 1.08 ]
 
 
 # In[ ]:
