@@ -11,7 +11,8 @@ dmp.py
 python dmp.py _StateName_
 
 ## Examples
-'''
+
+```
 python dmp.py "Uttar Pradesh"
 python dmp.py "Maharashtra"
-'''
+```
