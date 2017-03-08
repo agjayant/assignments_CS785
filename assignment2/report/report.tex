@@ -1,0 +1,179 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{multicol}
+
+\geometry{
+a4paper,
+right=10mm,
+left=10mm,
+top=10mm,
+bottom=10mm,	
+}
+
+\begin{document}
+
+\pagenumbering{gobble}
+
+\begin{center}
+\textbf{\Large Assignment 2 : CS785} \\
+\textit{\large Jayant Agrawal}         14282
+\end{center}
+
+\section{Motivation}
+The most important disadvantage of the current plurality based voting system in India is that the assembly(\emph{Lok Sabha}) elected is far from the true representation of votes. Consider Figure \ref{tab} containing data from the 2014 Lok Sabha Elections
+
+\begin{figure}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Some Major Parties} & \textbf{Vote Percentage} & \textbf{Seats in house} & \textbf{Seats according to Vote Percentage} \\
+\hline
+BJP & 31 & 280 & 169 \\
+Congress & 19.31 & 44 & 104 \\
+AIADMK & 3.27 & 37 & 17 \\
+AITC & 3.84 & 34 & 20 \\
+BSP & 4.14 & 0 & 22 \\
+\hline
+\end{tabular}
+\label{tab}
+\caption{Lok Sabha Elections 2014}
+\end{center}
+\end{figure}
+
+Clearly, there is a huge difference in the number of seats won, and those according to vote percentage. \emph{BJP} ends up winning about 111 more seats than deserved, while \emph{BSP} doesn't win a single seat despite deserving 22. This motivates the requirement of a \textbf{Proportional Election System}(Section \ref{prop}), which pushes for a better representational house, closer to the vote percentage.
+
+\section{Proportional Voting System}
+\label{prop}
+
+Under this system, each constituency has two elected winners. This is done to make the house more representational, the first winner for each district still comes from the plurality system and the second winner is there to compensate for the number of seats, his/her party deserved. But, since this is not feasible in a country like India( Large House Size), the size of each constituency can be increased(roughly double) to preserve the number of members in the house. Also, the number of MPs per voters remain the same roughly. Each party can field up to two candidates in each constituency. \\ \\
+Since, in India, the number of voters is huge, the ideal preference based voting is not feasible due to obvious reasons(illiteracy, time constraints etc.). This system holds ground here also. Each voter needs to vote for only one party(instead of a candidate). So, the vote remains the same as the current system in India(single choice). \\ \\
+\textbf{Round 1:} \emph{First Seat in each Constituency} \\
+The first seat in each constituency is again decided by the plurality system to make sure that the person with the most votes always wins. This saves the basic principle of having a house where the voters in each constituency are represented by a candidate of their choice.\\ \\
+\textbf{Round 2:} \emph{Second Seat in each Constituency} \\
+The second seats are distributed on the basis of vote percentage to make the representation proportionate. But, allocating the second seat in a constituency based on the vote percentage of the parties at the national level is not wise. This is because of the vast size and diversity. Using the vote percentage of the parties at the state level would preserve the regional emotions of the voters. The process for the second seat distribution for a constituency in a given state ($S$) is as follows:
+
+\begin{enumerate}
+\item Only parties, which have state vote percentage($v_i$) greater than a threshold($=1\%$) \textbf{or} which have won atleast one \emph{first} seat are eligible for getting second seats.
+\item First, calculate the number of seats($s_i$) that each party($i$) deserves in $S$ based on the vote percentage($v_i$) in $S$.
+$$ s_i = v_i*T $$
+where $T$ is the number of total seats in $S$. This will be in fractions. Round off $s_i$ and calculate the sum of all $s_i$.\\ \\ If the sum is less than T, distribute the remaining seats to all $s_i$ which were rounded down, starting from the one, with highest fraction part. If the sum is more than T, then remove from all $s_i$ which were rounded up, starting from the one, with lowest fraction part.
+\item The vote percentage of a party which has won the first seat is halved in each constituency.
+\item A preference list of seats is made for each party for the given state(S), based on the vote percentage, the party gets in each constituency.
+\item Calculate the number of seats required by each party($n$) in the state. This is the number of seats deserved($s_i$) minus the seats won in first round in that state. Assign each party the first n seats from their preference list. 
+\item There may be multiple seats with more than one second seat winner parties(a conflict). In this case, assign the seat with more than one second seat winner parties to the party with most votes in that constituency. The parties that lost due to this conflict, get the next seat in their preference list. 
+\item There may or may not be new conflicts. Keep repeating the step 6 untill, there are no more conflicts.
+\end{enumerate}
+
+\textbf{Note: } \\
+\emph{Independent} and \emph{NOTA} can win only in the First Round. No Second Seats are alloted to them.
+
+\section{Simulation}
+\subsection{Assumptions for Simulation}
+\begin{enumerate}
+\item For a given state, the adjacent constituencies($c_1,c_2$) are merged into one. If a party fields candidates in each of those constituencies, then it's votes are simply added. \\ \\
+If a party($i$) fields only one candidate, say in $c_1$. Then, the total votes of party $i$ for this constituency are \\$v_i(c_1)(1+n_2/n_1)$, where  $n_1$ and $n_2$ are the total votes in $c_1$ and $c_2$ respectively, initially. This is assuming that the choice of voters in the adjacent constituencies are similar.
+\item If the number of constituencies in a given state is odd, then any one constituency is removed, for this simulation. This is not important as in the real world implementation, the constituencies are not paired, they are already roughly double the size.
+\item For simplicity, \emph{Independent} and \emph{NOTA} has been removed.
+\end{enumerate}
+\textbf{Note:} Everything else is followed exactly as described in Section \ref{prop}.
+
+\subsection{Simulation on \emph{Maharashtra}}
+\emph{Using the data of 2014 Lok Sabha Election}\\ \\
+The vote share and the seats won in Maharashtra of all the major parties(\emph{atleast one seat or more than 1\% vote share}) are shown below(Figure \ref{perc}). 
+
+\begin{figure}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Vote Share($\times$100\%)} & \textbf{Party} & \textbf{Seats}\\
+\hline
+0.284 & BJP & 23\\
+0.215 & SHS & 18\\
+0.189&INC & 2\\
+0.166&NCP & 4\\
+0.027&BSP & 0\\
+0.023&SWP & 0\\
+0.023&AAAP & 0\\
+0.015&MNS & 0\\
+0.010&PWPI & 0\\
+\hline
+\end{tabular}
+\caption{Vote Share: Maharashtra}
+\label{perc}
+\end{center}
+\end{figure}
+
+\textbf{Observations(Figure \ref{perc}):} 
+\begin{enumerate}
+\item The difference in the vote share of \emph{SHS}(\emph{Shivsena}) and \emph{INC}(Congress) is barely 2\%, but the seats are 18 and 2 respectively.
+\item \emph{INC} has a greater share than \emph{NCP}, but less seats in the house.
+\end{enumerate}
+
+Using the Proportional System, we get the following Results(Figure \ref{props}):
+\begin{figure}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Party} & \textbf{Seats Won in 2014} & \textbf{Ideal Proportional Seats} & \textbf{Seats by Proportional System}\\
+\hline
+BJP & 23 & 14 & 15\\
+SHS & 18 & 11 & 11\\
+INC & 2 & 9 & 9\\
+NCP & 4 & 8 & 8\\
+BSP & 0 & 2 & 2\\
+SWP & 0 & 1 & 1\\
+AAAP & 0 & 1 & 0\\
+MNS & 0 & 1 & 1\\
+PWPI & 0 & 1 & 1\\
+\hline
+\end{tabular}
+\caption{Proportional System Result: Maharashtra}
+\label{props}
+\end{center}
+\end{figure}
+\\ \\
+\textbf{Observations(Figure \ref{props}):}
+\begin{enumerate}
+\item Almost all the parties get the number of seats they deserve.
+\item \emph{BJP} still gets one seat more than deserved. This is possible only when it gets more seats than deserved after Round 1 itself.
+\item \emph{AAAP} is not able to get a seat even after greater vote share than \emph{MNS} and \emph{PWPI} (1 seat each), maybe because it's vote share was scattered throughout the state, while the other two had their major share in those particular constituencies.
+\end{enumerate}
+\newpage
+\subsection{Simulation on \emph{Uttar Pradesh} (Figure \ref{up})}
+\begin{figure}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Party} & \textbf{Seats Won in 2014} & \textbf{Vote Share} & \textbf{Ideal Proportional Seats} & \textbf{Seats by Proportional System}\\
+\hline
+BJP & 0.433 & 71 & 35 & 36\\
+SP & 0.227 & 5 & 19 & 19\\
+BSP & 0.201 & 0 & 16 & 16\\
+INC & 0.076 & 2 & 7 & 7\\
+AAAP & 0.0103& 0 & 1 & 1\\
+AD & 0.0102 & 2 &1 & 1\\
+\hline
+\end{tabular}
+\caption{Proportional System Result: UP}
+\label{up}
+\end{center}
+\end{figure}
+
+\section{Conclusion}
+\begin{itemize}
+\item This system is easy to implement, since only one choice is needed per voter.
+\item Though this system looks 'too' ideal and unrealistic, because the number of seats are significantly different for the leader party. But this is not the case, since we have here doubled the constituency sizes and the leader party is still winning most of the first round seats (15/24 in Maharashtra, 36/40 in UP). 
+\item This system satisfies both the conditions: reasonable local representation(First Round), Proportional to Vote Share(Second Round).
+\item There is one major point though with regard to this system. This system will almost always(current scenario in India) result in no party with absolute majority resulting in a coalition government.
+\end{itemize}
+
+\emph{Code and Data File also submitted with a readme:} \textbf{dmp.py}
+\end{document}
+
+
