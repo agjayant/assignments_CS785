@@ -8,8 +8,11 @@ LS-2014_ElectionResult.xlsx
 dmp.py
 
 #Running
-python dmp.py <State>
+python dmp.py _StateName_
 
 ## Examples
+
+```
 python dmp.py "Uttar Pradesh"
 python dmp.py "Maharashtra"
+```
