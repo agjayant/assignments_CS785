@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{multicol}
+
+\geometry{
+a4paper,
+right=10mm,
+left=10mm,
+top=10mm,
+bottom=10mm,	
+}
+\newcommand\tab[1][15pt]{\hspace*{#1}} 
+\begin{document}
+
+\pagenumbering{gobble}
+
+\begin{center}
+\textbf{\Large CS785A : Multi-Agent Systems} \\
+\textit{\large Jayant Agrawal}         14282
+\end{center}
+
+\textbf{\large Assignment 3}
+\\ \\
+\textbf{Solution 1.}\\
+\textbf{(a).} Number of actions in round i is $(n-i)$. The total number of rounds before every player gets a share is $n$, since exactly one player gets a share in each round. Thus, total number of actions for the protocol: 
+$$\sum_{i=1}^n (n-i)$$
+This is of the order of $n^2$. \\ \\
+\textbf{(b).} \\ \\ 
+\textbf{(c).} Number of actions in round i (when $p_{i+1}$ enters) is $i(i+1)$, because the shares of $i$ players have to be divided into $(i+1)$ divisions each. Total number of rounds is $n$, since the protocol ends when all players have entered. Thus, the total number of actions for the protocol:
+$$\sum_{i=1}^n i(i+1)$$
+This is of the order of $n^3$.  \\ \\
+\textbf{Solution 2.} \\
+\textbf{(a).} If it is shown that the protocol is fair for all the three possibilities in step 3, then the protocol is fair. \\
+$\tab$ \emph{\underline{Possibility 1}- }There are more than one fair share for $p_2$.  Also, $p_3$ has atleast one share which is fair, since the resource is divided into 3. Now, irrespective of the choice of $p_3$, there is still atleast one share left which is fair for $p_2$. $p_1$ gets the remaining share, which is fair by Step 1. If more than one share is fair for $p_2$ and $p_3$ both, then also the same thing holds.\\
+\tab \emph{\underline{Possibility 2}- } $p_2$ and $p_3$ get fair allocation because their declared shares are different and there is no conflict. $p_1$ is indifferent for all allocations. Hence, everyone gets fair share. \\
+\tab \emph{\underline{Possibility 3}- } Since, both declare the same share as fair, the share picked up by $p_1$ has a value less than $ 1/3 $ for both $p_2$ and $p_3$. So, the remaining shares combined must have value greater than $ 2/3 $ for both $p_2$ and $p_3$. Now, say $p_2$ divides the remaining share into 2 and $p_3$ gets to choose. Here again, there exists atleast one share for $p_3$ which is fair and $p_2$ is indifferent between the two.
+Thus, the protocol is fair under all the three possibilities. \\ \\
+\textbf{(b).} 
+
+\end{document}
+
+
