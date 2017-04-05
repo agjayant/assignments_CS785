@@ -1,0 +1,105 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{multicol}
+
+\geometry{
+a4paper,
+right=10mm,
+left=10mm,
+top=10mm,
+bottom=10mm,	
+}
+\newcommand\tab[1][15pt]{\hspace*{#1}} 
+\begin{document}
+
+\pagenumbering{gobble}
+
+\begin{center}
+\textbf{\Large CS785A : Multi-Agent Systems} \\
+\textit{\large Jayant Agrawal}         14282
+\end{center}
+
+\textbf{\large Assignment 3}
+\\ \\
+\textbf{Solution 1.}\\
+\textbf{(a).} Number of actions in round i is $(n-i)$. The total number of rounds before every player gets a share is $n$, since exactly one player gets a share in each round. Thus, total number of actions for the protocol: 
+$$\sum_{i=1}^n (n-i)$$
+This is of the order of $n^2$. \\ \\
+\textbf{(b).} Clearly, there is no point in cheating and calling cut/trim for a share where $v(s) < 1/n$. Now, consider the case when a player($p_i$) calls cut/trim when $v(s) = 1/n+\epsilon $. Here, it is possible that some other player($p_j$) calls trim when $1/n< v(s) < 1/n+\epsilon$. Now, if $p_j$ goes on to win in this round and $p_i$ looses, then it is possible that the amount of resource left is less than 1/n for $p_i$. Thus, $p_i$ will end up losing and since it is risk-averse, it won't take the initial cheating step. Thus, this protocol is immune to manipulation by risk-averse agents.  \\ \\ 
+\textbf{(c).} Number of actions in round i (when $p_{i+1}$ enters) is $i(i+1)$, because the shares of $i$ players have to be divided into $(i+1)$ divisions each. Total number of rounds is $n$, since the protocol ends when all players have entered. Thus, the total number of actions for the protocol:
+$$\sum_{i=1}^n i(i+1)$$
+This is of the order of $n^3$.  \\ \\
+\textbf{Solution 2.} \\
+\textbf{(a).} If it is shown that the protocol is fair for all the three possibilities in step 3, then the protocol is fair. \\
+$\tab$ \emph{\underline{Possibility 1}- }There are more than one fair share for $p_2$.  Also, $p_3$ has atleast one share which is fair, since the resource is divided into 3. Now, irrespective of the choice of $p_3$, there is still atleast one share left which is fair for $p_2$. $p_1$ gets the remaining share, which is fair by Step 1. If more than one share is fair for $p_2$ and $p_3$ both, then also the same thing holds.\\
+\tab \emph{\underline{Possibility 2}- } $p_2$ and $p_3$ get fair allocation because their declared shares are different and there is no conflict. $p_1$ is indifferent for all allocations. Hence, everyone gets fair share. \\
+\tab \emph{\underline{Possibility 3}- } Since, both declare the same share as fair, the share picked up by $p_1$ has a value less than $ 1/3 $ for both $p_2$ and $p_3$. So, the remaining shares combined must have value greater than $ 2/3 $ for both $p_2$ and $p_3$. Now, say $p_2$ divides the remaining share into 2 and $p_3$ gets to choose. Here again, there exists atleast one share for $p_3$ which is fair and $p_2$ is indifferent between the two.
+Thus, the protocol is fair under all the three possibilities. \\ \\
+\textbf{(b).} The protocol is clearly not envy-free for $p_1$, since in step 3c. after $p_1$ has chosen, $p_1$ has no control over the allocation between $p_2$ and $p_3$. It is possible there that $v_1(s_2) > v_1(s_1)$.\\ \\
+\textbf{(c).} $p_1$ can't cheat because even if he/she keeps one share, s such that $v_1(s) > 1/3$, $p_1$ has no control over allocation b/w $p_2$ and $p_3$, and any one of them can get s, which leads to $p_1$ loosing. Now, consider $p_2$ can declare two shares($s_1,s_2$) to be fair, but instead cheats and declares one($s_1$), and $p_3$ also, declares the same share($s_1$) as fair only, $p_1$ chooses $s_2$. It is possible that $v_2(s_1)+v_2(s_3) < 2/3$. Then, $p_2$ has a clear chance of losing in the next round when the protocol is run b/w $p_2,p_3$. This is possible when say, $v_2(s_1) = 1/3+\epsilon, v_2(s_2) = 1/3+\epsilon/2, v_2(s_3) = 1/3-3/2*\epsilon$. Since, all of the players have a chance of loosing and they are risk-averse, thus the protocol is immune to manipulation by risk-averse agents.  \\ \\
+\textbf{(d).} \textbf{Protocol for n=4} \\
+\emph{1. }Choose the divider randomly, say $p_1$, who divides the resource into 4 equal shares($s_1,.. s_4$), such that they have equal value for $p_1$.
+$$v_1(s_1)=v_1(s_2)=v_1(s_3)=v_1(s_4)$$
+\emph{2. }Each of the remaining agents says which of the pieces are fair.\\
+\emph{3. }There are following possibilities: \\
+$\tab$ \emph{a. All three declare more than 2 fair: } Randomly allocate shares to $p_1,..,p_4$ \\
+$\tab$ \emph{b. Two($p_2,p_3$) declare more than 2 fair: } $p_4$ chooses first, then randomly allocate remaining two fair shares to $p_2,p_3$. $p_1$ gets remaining. \\
+$\tab$ \emph{c. One($p_2$) declare more than 2 fair: } \\
+$\tab \tab $ \emph{i. $p_3,p_4$ declare 2 fair: }Random Allocation of the two shares b/w $p_3,p_4$. Allocate the remaining fair share to $p_2$. $p_1$ gets remaining. \\ 
+$\tab \tab $ \emph{ii. $p_3$ declare 2 fair: }$p_4$ gets his fair share, then $p_3$, then $p_2$. $p_1$ gets remaining. \\
+$\tab \tab $ \emph{ii. $p_3,p_4$ declare one share fair each: } If different allocate respectively, then $p_2$ chooses. $p_1$ gets remaining. If same, $p_1$ chooses, merge remaning shares, start the protocol for 3 again.\\
+$\tab$ \emph{d. All three declare 2 fair: } If all the three have chosen the same two shares, then $p_1$ chooses,merge remaning shares, start the protocol for 3 again. Otherwise, every player can get one share each fairly. $p_1$ gets remaining. \\
+$\tab$ \emph{e. Two($p_2,p_3$) declare 2 fair: } Here, only problem case is when $p_2, p_3$ have same two shares, and $p_4$ declares his fair share in one of them. Then $p_1$ chooses,merge remaning shares, start the protocol for 3 again. Otherwise, every player can get one share each fairly. $p_1$ gets remaining.\\
+$\tab$ \emph{f. One($p_2$) declare 2 fair: } Two problem cases: \\
+$\tab \tab $ \emph{i.} $p_2 : {s_i,s_j}, p_3 : {s_i}, p_4 : {s_j}$\\
+$\tab \tab $ \emph{i.} $p_2 : {s_i,s_j}, p_3 : {s_i}, p_4 : {s_i}$ \\
+$\tab$ In both of these, $p_1$ chooses,merge remaning shares, start the protocol for 3 again. Otherwise, every player can get one share each fairly. $p_1$ gets remaining.\\ \\
+\textbf{Solution 3.} \\ 
+\emph{a. } No, the protocol is not finitely bounded in the number of cuts. Consider a round where the players come in the order of their valuation functions such that, $v_i(s) \geq v_j(s)$, if i comes before j, for any share s. In this case, the number of times player 1 calls cut(k) is bounded as:
+$$k \leq \frac{v_1(s_n)-v_1(s_1)}{\epsilon}$$
+where $v_1(s_1)=1/n$ and $v_n(s_n) = 1/n$ are the shares initially allocated to $p_1$ and $p_n$. Here, player 1 can call cut at potentially every allocation. Clearly, as $\epsilon$ tends to infinity, k gets unbounded.\\ \\
+\emph{b. } Every player($p_i$) calls cut as soon as the piece gets above 1/n $+\epsilon_i$. Consider player i, such that $\epsilon_i$ is the maximum. Then , it is clearly possible that $v_j(s_i)+\epsilon_j \geq v_i(s_i)$ and $v_j(s_j) \leq v_i(s_j) + \epsilon_i$, for all j. In this case, the protocol is $\epsilon$ envy free such that:
+$$\epsilon = max(\epsilon_1,..\epsilon_n)$$
+\newline
+\textbf{Solution 4.} \\
+\emph{a. } Consider division such that $S_0= {s_{01}, s_{02},..s_{0n}}$ such that:
+$$S_0 = argmax_{S}(sw(S))$$
+Now, consider partitions $P_1, P_2$ of $P$ such that, 
+$$P_1 = \{p_i | v_i(s_0i) \geq 1/\sqrt{n} \}$$
+$$P_2 = P \setminus P_1$$
+Using the above definations of $P_1$ and $P_2$ we get,
+$$sw(S_0) \leq |P_1| + \frac{|P_2|}{\sqrt(n)}$$
+Consider an allocation $S_1 = {s_{11},s_{12},..s_{1n}}$, defined as(Initially $s_{1i} = \phi \tab \forall i$): \\
+\emph{1. } \emph{$|L| \geq \sqrt(n)$} \\
+$$s_{1i} += \sum_{p_j \in P_1} \frac{1}{\sqrt{n}}s_j \tab \forall i \in P_1$$
+$$s_{1i} += \sum_{p_j \in P_1} \frac{n-\sqrt(n)}{n|P_2|}s_j \tab \forall i \in P_2$$
+Also, $\frac{n-\sqrt(n)}{n|P_2|}s_j \geq 1/n$, since $|P_2| \leq n-\sqrt{n}$. After this is done:
+$$s_{1i} += \sum_{p_j \in P_2} \frac{1}{|P_2|}s_j \tab \forall i \in P_2$$
+After this division, $v_i(s_{1i}) \geq 1/n \tab \forall i$, since agents in $P_1$ get atleast $1/\sqrt{n}$ of their share in $S_0$ which was atleast $1/\sqrt{n}$. And for agents in $P_2$, each one gets atleast $1/n$ of every share in $S_0$, thus for every agent, $v_i(s_{1i}) \geq 1/n $, which earlier was $ \leq 1/\sqrt{n}$. Clearly $S_1$ is a fair allocation. Thus, 
+$$sw(S_1) \leq \frac{1}{\sqrt{n}}sw(S_0)$$
+$$\frac{sw(S_0)}{sw(S_1)} \leq \sqrt{n}$$
+\emph{2. } \emph{$|L| < \sqrt(n)$} \\
+$$sw(S_0) < 2\sqrt{n}-1$$
+since $sw(S_0) \leq |P_1| + \frac{|P_2|}{\sqrt(n)}$. Therefore, since for any fair allocation $S_1$, $sw(S_1) \geq 1$, 
+$$\frac{sw(S_0)}{sw(S_1)} \leq O(\sqrt{n})$$
+\emph{b. } Consider valuation functions such that total number of items is $m<n$, $r_1,.. r_m$. Agent i has the following function:
+$$v_i(r_i) = 1 \tab \forall i< m+1$$
+$$v_i(r_j) = 0 \tab \forall i< m+1, i != j$$
+$$v_i(r_j) = 1/m \tab \forall i >m, \forall j$$
+Clearly $S_0$ would be $r_1, r_2,..r_m, 0,..0$, with $sw(S_0)=m$. For $S_1$, let the amount of resource allocated to $p_{m+1},..p_n$ is x. Then, since the allocation is fair $x\geq \frac{m(n-m)}{n}$. The amount of resource with $p_1,..p_m$ is m-x. Thus, 
+$$sw(S_1) = m-x + x/m$$
+$$sw(S_1) \leq \frac{m^2+n-m}{n}$$
+Now, 
+$$\frac{sw(S_0)}{sw(S_1)}  \geq \frac{mn}{m^2+n-m}$$
+$$\frac{sw(S_0)}{sw(S_1)}  \geq \frac{\sqrt{n}}{2}$$, if $n=m^2$.
+Therefore, 
+$$\frac{sw(S_0)}{sw(S_1)}  = \Omega(\sqrt{n})$$ 
+\end{document}
+
+
